@@ -12,5 +12,7 @@ namespace autosupport_lsp_server
 
         string[] StartRules { get; }
         IDictionary<string, IRule> Rules { get; }
+
+        string[] VerifyAndGetErrors();
     }
 }

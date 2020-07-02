@@ -1,8 +1,11 @@
 ﻿using autosupport_lsp_server.Serialization;
 using autosupport_lsp_server.Serialization.Annotation;
 using autosupport_lsp_server.Symbols;
+using autosupport_lsp_server.Symbols.Impl.Terminals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Xml.Linq;
 
 namespace autosupport_lsp_server
@@ -32,6 +35,88 @@ namespace autosupport_lsp_server
 
         [XLinqName("rules")]
         public IDictionary<string, IRule> Rules { get; private set; }
+
+        public string[] VerifyAndGetErrors()
+        {
+            var errors = new List<string>();
+
+            foreach (var rule in Rules)
+            {
+                foreach (var symbol in rule.Value.Symbols)
+                {
+                    symbol.Match(
+                        terminal =>
+                        {
+                            if (terminal is StringTerminal stringTerminal && stringTerminal.String == "")
+                                errors.Add($"rule {rule.Key}: A string terminal is empty");
+                        },
+                        nonTerminal =>
+                        {
+                            if (!Rules.ContainsKey(nonTerminal.ReferencedRule))
+                                errors.Add($"rule {rule.Key}: Referenced rule {nonTerminal.ReferencedRule} not defined");
+                        },
+                        action =>
+                        {
+                            string? actionError = GetErrorWithAction(action);
+
+                            if (actionError != null)
+                                errors.Add($"rule {rule.Key}: " + actionError);
+                        },
+                        oneOf =>
+                        {
+                            if (!oneOf.AllowNone && oneOf.Options.Length == 0)
+                                errors.Add($"rule {rule.Key}: A OneOf does not allowNone and is empty");
+                            if (oneOf.AllowNone && oneOf.Options.Length == 0)
+                                errors.Add($"rule {rule.Key}: Useless OneOf: allowNone is true and no options are given");
+                            if (!oneOf.AllowNone && oneOf.Options.Length == 1)
+                                errors.Add($"rule {rule.Key}: Useless OneOf: allowNone is false and only one option is given");
+                        }
+                        );
+                }
+            }
+
+            return errors.ToArray();
+        }
+
+        private string? GetErrorWithAction(IAction action)
+        {
+            return action.Command switch
+            {
+                IAction.IDENTIFIER => null,
+
+                IAction.IDENTIFIER_TYPE =>
+                    action.GetArguments()[0] switch
+                    {
+                        IAction.IDENTIFIER_TYPE_ARG_SET => null,
+                        IAction.IDENTIFIER_TYPE_ARG_INNER => null,
+                        _ => $"First argument {action.GetArguments()[0]} not supported for {action.Command}"
+                    },
+
+                IAction.IDENTIFIER_KIND =>
+                    action.GetArguments()[0] switch
+                    {
+                        IAction.IDENTIFIER_KIND_ARG_SET =>
+                            Constants.ValidKinds.Contains(action.GetArguments()[1])
+                                ? null
+                                : $"Kind {action.GetArguments()[1]} is not supported",
+                        _ => $"First argument {action.GetArguments()[0]} not supported for {action.Command}"
+                    },
+
+                IAction.DECLARATION => null,
+
+                IAction.IMPLEMENTATION => null,
+
+                IAction.FOLDING =>
+                    action.GetArguments()[0] switch
+                    {
+                        IAction.FOLDING_START => null,
+                        IAction.FOLDING_END => null,
+                        _ => $"First argument {action.GetArguments()[0]} not supported for {action.Command}"
+                    },
+
+                _ => $"Command {action.Command} is not supported"
+            };
+        }
 
         public XElement SerializeToXLinq()
         {
