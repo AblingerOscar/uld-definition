@@ -49,38 +49,78 @@ namespace autosupport_lsp_server
         {
             var errors = new List<string>();
 
-            foreach (var rule in Rules)
-            {
-                foreach (var symbol in rule.Value.Symbols)
-                {
-                    symbol.Match(
-                        terminal =>
-                        {
-                            if (terminal is StringTerminal stringTerminal && stringTerminal.String == "")
-                                errors.Add($"rule {rule.Key}: A string terminal is empty");
-                        },
-                        nonTerminal =>
-                        {
-                            if (!Rules.ContainsKey(nonTerminal.ReferencedRule))
-                                errors.Add($"rule {rule.Key}: Referenced rule {nonTerminal.ReferencedRule} not defined");
-                        },
-                        action =>
-                        {
-                            string? actionError = GetErrorWithAction(action);
+            if (string.IsNullOrWhiteSpace(LanguageId))
+                errors.Add($"{nameof(LanguageId)} is null or an empty string");
 
-                            if (actionError != null)
-                                errors.Add($"rule {rule.Key}: " + actionError);
+            if (string.IsNullOrWhiteSpace(LanguageFilePattern))
+                errors.Add($"{nameof(LanguageFilePattern)} is null or an empty string");
+
+            if (CommentRules.DocumentationComments == null)
+                errors.Add($"{nameof(CommentRules)}.{nameof(CommentRules.DocumentationComments)} is null (empty array is allowed)");
+
+            if (CommentRules.NormalComments == null)
+                errors.Add($"{nameof(CommentRules)}.{nameof(CommentRules.NormalComments)} is null (empty array is allowed)");
+
+            if (StartRules == null)
+                errors.Add($"{nameof(StartRules)} is null");
+            else if (StartRules.Length == 0)
+                errors.Add($"{nameof(StartRules)}: No rule was specified");
+            else
+                foreach (var rule in StartRules)
+                    if (Rules == null || !Rules.ContainsKey(rule))
+                        errors.Add($"{nameof(StartRules)}: Startrule '{rule}' was not found in {nameof(Rules)}");
+
+            if (Rules == null || Rules.Count == 0)
+                errors.Add($"{nameof(Rules)} is null or empty");
+            else
+            {
+                foreach (var rule in Rules)
+                {
+                    if (rule.Value.Symbols == null || rule.Value.Symbols.Count == 0)
+                    {
+                        errors.Add($"{rule.Key} has no symbols");
+                        continue;
+                    }
+                    rule.Value.Symbols[0].Match(
+                        _ => { },
+                        nonTerminal => {
+                            if (nonTerminal.ReferencedRule == rule.Key)
+                                errors.Add($"{rule.Key}: left-recursion detected (according to the specifications this does not have to be supported by the server)");
                         },
-                        oneOf =>
-                        {
-                            if (!oneOf.AllowNone && oneOf.Options.Length == 0)
-                                errors.Add($"rule {rule.Key}: A OneOf does not allowNone and is empty");
-                            if (oneOf.AllowNone && oneOf.Options.Length == 0)
-                                errors.Add($"rule {rule.Key}: Useless OneOf: allowNone is true and no options are given");
-                            if (!oneOf.AllowNone && oneOf.Options.Length == 1)
-                                errors.Add($"rule {rule.Key}: Useless OneOf: allowNone is false and only one option is given");
-                        }
-                        );
+                        _ => { },
+                        _ => { });
+
+                    foreach (var symbol in rule.Value.Symbols)
+                    {
+                        symbol.Match(
+                            terminal =>
+                            {
+                                if (terminal is StringTerminal stringTerminal && stringTerminal.String == "")
+                                    errors.Add($"rule {rule.Key}: A string terminal is empty");
+                            },
+                            nonTerminal =>
+                            {
+                                if (!Rules.ContainsKey(nonTerminal.ReferencedRule))
+                                    errors.Add($"rule {rule.Key}: Referenced rule {nonTerminal.ReferencedRule} not defined");
+                            },
+                            action =>
+                            {
+                                string? actionError = GetErrorWithAction(action);
+
+                                if (actionError != null)
+                                    errors.Add($"rule {rule.Key}: " + actionError);
+                            },
+                            oneOf =>
+                            {
+                                if (!oneOf.AllowNone && oneOf.Options.Length == 0)
+                                    errors.Add($"rule {rule.Key}: A OneOf does not allowNone and is empty");
+                                if (oneOf.AllowNone && oneOf.Options.Length == 0)
+                                    errors.Add($"rule {rule.Key}: Useless OneOf: allowNone is true and no options are given");
+                                if (!oneOf.AllowNone && oneOf.Options.Length == 1)
+                                    errors.Add($"rule {rule.Key}: Useless OneOf: allowNone is false and only one option is given");
+                            }
+                            );
+                    }
                 }
             }
 
