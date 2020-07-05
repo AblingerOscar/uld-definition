@@ -1,9 +1,11 @@
-﻿using autosupport_lsp_server.Symbols;
+﻿using autosupport_lsp_server.Serialization;
+using autosupport_lsp_server.Symbols;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace autosupport_lsp_server
 {
-    public interface IAutosupportLanguageDefinition
+    public interface IAutosupportLanguageDefinition : IXLinqSerializable
     {
         string LanguageId { get; }
         string LanguageFilePattern { get; }
