@@ -18,6 +18,14 @@ namespace autosupport_lsp_server.Symbols.Impl
         [XLinqName("allowNone")]
         public bool AllowNone { get; private set; } = false;
 
+        public OneOf() { }
+
+        public OneOf(bool allowNone, string[] options)
+        {
+            AllowNone = allowNone;
+            Options = options;
+        }
+
         public void Match(Action<ITerminal> terminal, Action<INonTerminal> nonTerminal, Action<IAction> action, Action<IOneOf> oneOf)
         {
             oneOf.Invoke(this);

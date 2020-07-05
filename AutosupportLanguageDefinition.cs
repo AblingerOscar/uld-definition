@@ -22,6 +22,15 @@ namespace autosupport_lsp_server
             Rules = new Dictionary<string, IRule>();
         }
 
+        public AutosupportLanguageDefinition(string languageId, string languageFilePattern, CommentRules commentRules, string[] startRules, IDictionary<string, IRule> rules)
+        {
+            LanguageId = languageId;
+            LanguageFilePattern = languageFilePattern;
+            CommentRules = commentRules;
+            StartRules = startRules;
+            Rules = rules;
+        }
+
         [XLinqName("name")]
         public string LanguageId { get; private set; }
         [XLinqName("filePattern")]

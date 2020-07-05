@@ -1,5 +1,7 @@
 ﻿using autosupport_lsp_server.Serialization;
 using autosupport_lsp_server.Serialization.Annotation;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Xml.Linq;
@@ -14,6 +16,14 @@ namespace autosupport_lsp_server.Symbols.Impl
         public string Name { get; private set; } = "";
 
         public IImmutableList<ISymbol> Symbols { get; private set; } = ImmutableList<ISymbol>.Empty;
+
+        public Rule() { }
+
+        public Rule(string name, IEnumerable<ISymbol> symbols)
+        {
+            Name = name;
+            Symbols = symbols.ToImmutableList();
+        }
 
         public XElement SerializeToXLinq()
         {

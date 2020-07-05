@@ -11,6 +11,10 @@ namespace autosupport_lsp_server.Symbols.Impl
         [XLinqName("referencedRule")]
         public string ReferencedRule { get; private set; } = "";
 
+        public NonTerminal() { }
+
+        public NonTerminal(string referencedRule) => ReferencedRule = referencedRule;
+
         public override void Match(Action<ITerminal> terminal, Action<INonTerminal> nonTerminal, Action<IAction> action, Action<IOneOf> oneOf)
         {
             nonTerminal.Invoke(this);
