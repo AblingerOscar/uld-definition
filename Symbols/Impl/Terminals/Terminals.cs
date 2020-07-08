@@ -102,4 +102,22 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
 
         protected override Parser<char> CharParser => Parse.WhiteSpace;
     }
+
+    [XLinqName("anyCharExcept")]
+    public class AnyCharExceptTerminal : CharTerminal
+    {
+        public AnyCharExceptTerminal(char[] chars)
+        {
+            this.chars = chars;
+        }
+
+        private readonly char[] chars;
+
+        protected override Parser<char> CharParser => Parse.Ref(() => Parse.CharExcept(chars));
+
+        public override string? ToString()
+        {
+            return base.ToString() + $"({chars.JoinToString("")})";
+        }
+    }
 }
