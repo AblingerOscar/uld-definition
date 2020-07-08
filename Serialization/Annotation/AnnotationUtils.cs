@@ -15,9 +15,9 @@ namespace autosupport_lsp_server.Serialization.Annotation
         private static readonly IDictionary<string, Type> annotatedTypes =
                 (from type in Assembly.GetExecutingAssembly().GetTypes()
                  where type.IsClass
-                 select new Tuple<XLinqNameAttribute?, Type>(type.GetCustomAttribute<XLinqNameAttribute>(true), type))
-                 .Where(tuple => tuple.Item1 != null && tuple.Item2 != null)
-                .ToDictionary(tuple => tuple.Item1.Name, tuple => tuple.Item2);
+                 select (type.GetCustomAttribute<XLinqNameAttribute>(true), type))
+                .Where(tuple => tuple.Item1 != null && tuple.type != null)
+                .ToDictionary(tuple => tuple.Item1.Name, tuple => tuple.type);
 
         internal static Type? FindTypeWithName(string annotationName)
         {

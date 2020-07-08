@@ -39,9 +39,10 @@ namespace autosupport_lsp_server.Symbols.Impl
         public XElement SerializeToXLinq()
         {
             return new XElement(annotation.ClassName(),
-                Options.Select<string, object>(option =>
-                    new XElement(annotation.PropertyName(nameof(Options)), option))
-                .Prepend(new XAttribute(annotation.PropertyName(nameof(AllowNone)), XmlConvert.ToString(AllowNone)))
+                new[] { new XAttribute(annotation.PropertyName(nameof(AllowNone)), XmlConvert.ToString(AllowNone)) }
+                .Union(
+                    Options.Select<string, object>(option =>
+                        new XElement(annotation.KeysName(nameof(Options)), option)))
                 .ToArray());
         }
 

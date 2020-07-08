@@ -13,7 +13,7 @@ namespace autosupport_lsp_server.Symbols.Impl
 
         public virtual XElement SerializeToXLinq()
         {
-            return new XElement(annotation.ClassName());
+            return new XElement(annotation.RuntimeClassName(GetType()));
         }
 
         protected static void AddSymbolValuesFromXLinq(Symbol symbol, XElement element, IInterfaceDeserializer interfaceDeserializer)

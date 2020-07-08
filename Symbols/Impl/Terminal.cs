@@ -27,11 +27,6 @@ namespace autosupport_lsp_server.Symbols.Impl
             return terminal.Invoke(this);
         }
 
-        public override XElement SerializeToXLinq()
-        {
-            return base.SerializeToXLinq();
-        }
-
         public static ITerminal FromXLinq(XElement element, IInterfaceDeserializer interfaceDeserializer)
         {
             var name = element.Name.ToString();

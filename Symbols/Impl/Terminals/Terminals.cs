@@ -2,6 +2,8 @@
 using Sprache;
 using System;
 using System.Linq;
+using System.Xml.Linq;
+using static autosupport_lsp_server.Serialization.Annotation.AnnotationUtils;
 
 namespace autosupport_lsp_server.Symbols.Impl.Terminals
 {
@@ -22,6 +24,13 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
 
         protected override Parser<string> Parser =>
             Parse.Ref(() => Parse.String(String)).Text();
+
+        private static readonly XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(StringTerminal));
+
+        public override XElement SerializeToXLinq()
+        {
+            return new XElement(annotation.ClassName(), String);
+        }
 
         public override string? ToString()
         {
