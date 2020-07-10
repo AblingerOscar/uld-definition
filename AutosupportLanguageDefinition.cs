@@ -95,8 +95,18 @@ namespace autosupport_lsp_server
                         symbol.Match(
                             terminal =>
                             {
-                                if (terminal is StringTerminal stringTerminal && stringTerminal.String == "")
-                                    errors.Add($"rule {rule.Key}: A string terminal is empty");
+                                switch (terminal)
+                                {
+                                    case StringTerminal stringTerminal when stringTerminal.String == "":
+                                        errors.Add($"rule {rule.Key}: A string terminal is empty");
+                                        break;
+                                    case AnyCharExceptTerminal anyCharExceptTerminal when anyCharExceptTerminal.Chars.Length == 0:
+                                        errors.Add($"rule {rule.Key}: A AnyCharExceptTerminal has no options");
+                                        break;
+                                    case OneCharOfTerminal oneCharOfTerminal when oneCharOfTerminal.Chars.Length == 0:
+                                        errors.Add($"rule {rule.Key}: A OneCharOf has no options");
+                                        break;
+                                }
                             },
                             nonTerminal =>
                             {
