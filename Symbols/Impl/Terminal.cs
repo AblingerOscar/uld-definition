@@ -48,6 +48,12 @@ namespace autosupport_lsp_server.Symbols.Impl
                 AddSymbolValuesFromXLinq(result, element, interfaceDeserializer);
                 return result;
             }
+            else if (typeof(OneCharOfTerminal).IsAssignableFrom(elementType))
+            {
+                var result = new OneCharOfTerminal(element.Value.ToCharArray());
+                AddSymbolValuesFromXLinq(result, element, interfaceDeserializer);
+                return result;
+            }
             else if (typeof(Terminal).IsAssignableFrom(elementType))
             {
                 if (elementType.GetConstructor(new Type[0])?.Invoke(null) is Terminal result)

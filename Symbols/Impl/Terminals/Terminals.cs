@@ -1,7 +1,5 @@
 ﻿using autosupport_lsp_server.Serialization.Annotation;
 using Sprache;
-using System;
-using System.Linq;
 using System.Xml.Linq;
 using static autosupport_lsp_server.Serialization.Annotation.AnnotationUtils;
 
@@ -114,6 +112,24 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
         private readonly char[] chars;
 
         protected override Parser<char> CharParser => Parse.Ref(() => Parse.CharExcept(chars));
+
+        public override string? ToString()
+        {
+            return base.ToString() + $"({chars.JoinToString("")})";
+        }
+    }
+
+    [XLinqName("oneCharOf")]
+    public class OneCharOfTerminal : CharTerminal
+    {
+        public OneCharOfTerminal(char[] chars)
+        {
+            this.chars = chars;
+        }
+
+        private readonly char[] chars;
+
+        protected override Parser<char> CharParser => Parse.Ref(() => Parse.Chars(chars));
 
         public override string? ToString()
         {
