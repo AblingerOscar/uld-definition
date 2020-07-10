@@ -1,4 +1,6 @@
-﻿using autosupport_lsp_server.Serialization.Annotation;
+﻿using System;
+using System.Collections.Immutable;
+using autosupport_lsp_server.Serialization.Annotation;
 using Sprache;
 using System.Xml.Linq;
 using static autosupport_lsp_server.Serialization.Annotation.AnnotationUtils;
@@ -106,16 +108,16 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
     {
         public AnyCharExceptTerminal(char[] chars)
         {
-            this.chars = chars;
+            Chars = ImmutableArray.CreateRange(chars);
         }
 
-        private readonly char[] chars;
+        public ImmutableArray<char> Chars { get; }
 
-        protected override Parser<char> CharParser => Parse.Ref(() => Parse.CharExcept(chars));
+        protected override Parser<char> CharParser => Parse.Ref(() => Parse.CharExcept(Chars));
 
         public override string? ToString()
         {
-            return base.ToString() + $"({chars.JoinToString("")})";
+            return base.ToString() + $"({Chars.JoinToString("")})";
         }
     }
 
@@ -124,16 +126,18 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
     {
         public OneCharOfTerminal(char[] chars)
         {
-            this.chars = chars;
+            Chars = ImmutableArray.CreateRange(chars);
         }
 
-        private readonly char[] chars;
+        public ImmutableArray<char> Chars { get; }
 
-        protected override Parser<char> CharParser => Parse.Ref(() => Parse.Chars(chars));
+        protected override Parser<char> CharParser => Parse.Char(
+            c => Chars.Contains(c),
+            "Any character in the list");
 
         public override string? ToString()
         {
-            return base.ToString() + $"({chars.JoinToString("")})";
+            return base.ToString() + $"({Chars.JoinToString("")})";
         }
     }
 }
