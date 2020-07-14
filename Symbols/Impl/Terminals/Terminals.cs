@@ -103,7 +103,7 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
         protected override Parser<char> CharParser => Parse.WhiteSpace;
     }
 
-    [XLinqName("anyCharExcept")]
+    [XLinqName("characterExcept")]
     public class AnyCharExceptTerminal : CharTerminal
     {
         public AnyCharExceptTerminal(char[] chars)
@@ -115,13 +115,20 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
 
         protected override Parser<char> CharParser => Parse.Ref(() => Parse.CharExcept(Chars));
 
+        private static readonly XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(AnyCharExceptTerminal));
+
+        public override XElement SerializeToXLinq()
+        {
+            return new XElement(annotation.ClassName(), Chars.JoinToString(""));
+        }
+
         public override string? ToString()
         {
             return base.ToString() + $"({Chars.JoinToString("")})";
         }
     }
 
-    [XLinqName("oneCharOf")]
+    [XLinqName("characterOf")]
     public class OneCharOfTerminal : CharTerminal
     {
         public OneCharOfTerminal(char[] chars)
@@ -134,6 +141,13 @@ namespace autosupport_lsp_server.Symbols.Impl.Terminals
         protected override Parser<char> CharParser => Parse.Char(
             c => Chars.Contains(c),
             "Any character in the list");
+
+        private static readonly XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(OneCharOfTerminal));
+
+        public override XElement SerializeToXLinq()
+        {
+            return new XElement(annotation.ClassName(), Chars.JoinToString(""));
+        }
 
         public override string? ToString()
         {
