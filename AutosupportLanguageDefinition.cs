@@ -139,7 +139,7 @@ namespace autosupport_lsp_server
 
         private string? GetErrorWithAction(IAction action)
         {
-            return action.Command switch
+            return action.GetBaseCommand() switch
             {
                 IAction.IDENTIFIER => null,
 
