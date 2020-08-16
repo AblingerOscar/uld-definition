@@ -18,7 +18,7 @@
         public const string IDENTIFIER_KIND_ARG_SET = "set";
 
         public const string DECLARATION = "declaration";
-
+        public const string DEFINITION = "definition";
         public const string IMPLEMENTATION = "implementation";
 
         public const string FOLDING = "folding";
