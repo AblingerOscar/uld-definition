@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace autosupport_lsp_server
 {
-    public interface IAutosupportLanguageDefinition : IXLinqSerializable
+    public interface ILanguageDefinition : IXLinqSerializable
     {
         string LanguageId { get; }
         string LanguageFilePattern { get; }

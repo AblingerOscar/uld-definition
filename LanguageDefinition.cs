@@ -10,10 +10,12 @@ using System.Xml.Linq;
 
 namespace autosupport_lsp_server
 {
+    // rename autosupport to ULD = "Universal Language Definition"
+
     [XLinqName("languageDefinition")]
-    public class AutosupportLanguageDefinition : IAutosupportLanguageDefinition
+    public class LanguageDefinition : ILanguageDefinition
     {
-        private AutosupportLanguageDefinition()
+        private LanguageDefinition()
         {
             LanguageId = "";
             LanguageFilePattern = "";
@@ -22,7 +24,7 @@ namespace autosupport_lsp_server
             Rules = new Dictionary<string, IRule>();
         }
 
-        public AutosupportLanguageDefinition(string languageId, string languageFilePattern, CommentRules commentRules, string[] startRules, IDictionary<string, IRule> rules)
+        public LanguageDefinition(string languageId, string languageFilePattern, CommentRules commentRules, string[] startRules, IDictionary<string, IRule> rules)
         {
             LanguageId = languageId;
             LanguageFilePattern = languageFilePattern;
@@ -47,6 +49,9 @@ namespace autosupport_lsp_server
 
         public string[] VerifyAndGetErrors()
         {
+            // TODO: check for unused rules (aka not referenced in either a nonTerminal or a startRule)
+            // TODO: check for duplicate characters in characterOf or characterExcept
+
             var errors = new List<string>();
 
             if (string.IsNullOrWhiteSpace(LanguageId))
@@ -60,6 +65,22 @@ namespace autosupport_lsp_server
 
             if (CommentRules.NormalComments == null)
                 errors.Add($"{nameof(CommentRules)}.{nameof(CommentRules.NormalComments)} is null (empty array is allowed)");
+
+            new[] { CommentRules.DocumentationComments, CommentRules.NormalComments }
+                .WhereNotNull()
+                .SelectMany(comments => comments)
+                .ForEach(comment =>
+                {
+                    if (comment.Start == null || comment.End == null || comment.TreatAs == null)
+                        errors.Add("A comment's start, end, treatAs or any combination of those is null");
+
+                    var nonWsTreatAsCharacters = comment.TreatAs?
+                        .Where(ch => !char.IsWhiteSpace(ch))
+                        .ToArray();
+
+                    if (nonWsTreatAsCharacters != null && nonWsTreatAsCharacters?.Length != 0)
+                        errors.Add($"{comment}: invalid characters {nonWsTreatAsCharacters.JoinToString(", ")} in TreatAs – only whitespace is allowed");
+                });
 
             if (StartRules == null)
                 errors.Add($"{nameof(StartRules)} is null");
@@ -81,6 +102,8 @@ namespace autosupport_lsp_server
                         errors.Add($"{rule.Key} has no symbols");
                         continue;
                     }
+                    // TODO: properly check for left-recursion even if other elements but nonTerminal are the first
+                    //     element (e.g. actions or oneOf)
                     rule.Value.Symbols[0].Match(
                         _ => { },
                         nonTerminal => {
@@ -163,6 +186,8 @@ namespace autosupport_lsp_server
 
                 IAction.DECLARATION => null,
 
+                IAction.DEFINITION => null,
+
                 IAction.IMPLEMENTATION => null,
 
                 IAction.FOLDING =>
@@ -182,6 +207,7 @@ namespace autosupport_lsp_server
             return new XElement(annotation.ClassName(),
                 new XAttribute(annotation.PropertyName(nameof(LanguageId)), LanguageId),
                 new XAttribute(annotation.PropertyName(nameof(LanguageFilePattern)), LanguageFilePattern),
+                new XAttribute("version", "v1.0.0"),
                 CommentRules.SerializeToXLinq(),
                 new XElement(annotation.PropertyName(nameof(StartRules)),
                     from node in StartRules
@@ -192,14 +218,14 @@ namespace autosupport_lsp_server
                 );
         }
 
-        private readonly static AnnotationUtils.XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(AutosupportLanguageDefinition));
+        private readonly static AnnotationUtils.XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(LanguageDefinition));
 
-        public static AutosupportLanguageDefinition FromXLinq(XElement element, IInterfaceDeserializer interfaceDeserializer)
+        public static LanguageDefinition FromXLinq(XElement element, IInterfaceDeserializer interfaceDeserializer)
         {
             if (element == null)
                 throw new System.ArgumentException("'element' is null");
 
-            return new AutosupportLanguageDefinition()
+            return new LanguageDefinition()
             {
                 LanguageId = element.Attribute(annotation.PropertyName(nameof(LanguageId))).Value,
                 LanguageFilePattern = element.Attribute(annotation.PropertyName(nameof(LanguageFilePattern))).Value,

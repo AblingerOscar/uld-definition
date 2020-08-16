@@ -19,9 +19,9 @@ namespace autosupport_lsp_server.Serialization
             }
         }
 
-        public IAutosupportLanguageDefinition DeserializeAutosupportLanguageDefinition(XElement element)
+        public ILanguageDefinition DeserializeLanguageDefinition(XElement element)
         {
-            return AutosupportLanguageDefinition.FromXLinq(element, this);
+            return LanguageDefinition.FromXLinq(element, this);
         }
 
         public ISymbol DeserializeSymbol(XElement element)
