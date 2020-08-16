@@ -14,6 +14,14 @@ namespace autosupport_lsp_server
                 action.Invoke(item);
             }
         }
+        
+        public static void ForEach<T, R>(this IEnumerable<T> list, Func<T, R> action)
+        {
+            foreach (T item in list)
+            {
+                action.Invoke(item);
+            }
+        }
 
         public static string JoinToString<T>(this IEnumerable<T> list, string separator = "\n")
         {
