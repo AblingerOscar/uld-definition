@@ -1,0 +1,121 @@
+<xs:schema
+        elementFormDefault="qualified"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:def="https://github.com/AblingerOscar/autosupport-definition"
+        attributeFormDefault="qualified"
+        targetNamespace="https://github.com/AblingerOscar/autosupport-definition">
+    <xs:complexType name="void"/>
+    <xs:simpleType name="nonEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="actionString">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="identifier|identifierType (inner|set [^ ]+)|identifierKind set [^ ]+|declaration|implementation|folding (start|end)"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="comment">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="start" type="def:nonEmptyString"/>
+                <xs:element name="end" type="def:nonEmptyString"/>
+                <xs:element name="treatAs" type="xs:string"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="comments">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="documentationComments">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="def:comment" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="normalComments">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="def:comment" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="startRules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="startRule" type="def:nonEmptyString" maxOccurs="unbounded" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="rule">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element name="oneOf">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="option" type="def:nonEmptyString" maxOccurs="unbounded" minOccurs="1"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:boolean" name="allowNone" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="nonTerminal">
+                    <xs:complexType>
+                        <xs:attribute type="def:nonEmptyString" name="referencedRule" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="action" type="def:actionString"/>
+                <!-- terminals -->
+                <xs:element name="string" type="def:nonEmptyString"/>
+                <xs:element name="lineEnd" type="def:void"/>
+                <xs:element name="letter" type="def:void"/>
+                <xs:element name="letterOrDigit" type="def:void"/>
+                <xs:element name="lowercaseLetter" type="def:void"/>
+                <xs:element name="uppercaseLetter" type="def:void"/>
+                <xs:element name="character" type="def:void"/>
+                <xs:element name="characterOf" type="def:nonEmptyString"/>
+                <xs:element name="characterExcept" type="def:nonEmptyString"/>
+                <xs:element name="digit" type="def:void"/>
+                <xs:element name="whitespace" type="def:void"/>
+            </xs:choice>
+            <xs:attribute type="def:nonEmptyString" name="name" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="rules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="def:rule" maxOccurs="unbounded" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="languageDefinition">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="def:comments"/>
+                <xs:element ref="def:startRules"/>
+                <xs:element ref="def:rules"/>
+            </xs:all>
+            <xs:attribute type="def:nonEmptyString" name="name"/>
+            <xs:attribute type="def:nonEmptyString" name="filePattern"/>
+            <xs:attribute type="def:nonEmptyString" name="version" use="required" fixed="v1.0.0"/>
+        </xs:complexType>
+        <xs:key name="ruleName">
+            <xs:selector xpath="def:rules/def:rule"/>
+            <xs:field xpath="@def:name"/>
+        </xs:key>
+        <xs:keyref name="nonTerminal" refer="def:ruleName">
+            <xs:selector xpath="def:rules/def:rule/def:nonTerminal"/>
+            <xs:field xpath="@def:referencedRule"/>
+        </xs:keyref>
+        <xs:keyref name="startRule" refer="def:ruleName">
+            <xs:selector xpath="def:startRules/def:startRule"/>
+            <xs:field xpath="def:startRule"/>
+        </xs:keyref>
+    </xs:element>
+</xs:schema>
