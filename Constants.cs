@@ -4,9 +4,11 @@ namespace autosupport_lsp_server
 {
     public static class Constants
     {
-        public static char NewLine = '\n';
+        public const char NewLine = '\n';
 
-        public readonly static ImmutableArray<string> ValidKinds = ImmutableArray.Create(new[]
+        public const string XML_NAMESPACE = "https://github.com/AblingerOscar/autosupport-definition";
+
+        public static readonly ImmutableArray<string> ValidKinds = ImmutableArray.Create(new[]
             {
                 "Text",
                 "Method",

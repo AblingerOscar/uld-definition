@@ -36,10 +36,10 @@ namespace autosupport_lsp_server
 
         public override string? ToString()
         {
-            return $"{Start} until {End}";
+            return $"<{Start}> until <{End}>, treated as <{TreatAs}>";
         }
 
-        private readonly static AnnotationUtils.XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(CommentRule));
+        private static readonly AnnotationUtils.XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(CommentRule));
 
         internal XElement SerializeToXLinq()
         {

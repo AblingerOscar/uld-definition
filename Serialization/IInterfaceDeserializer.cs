@@ -9,6 +9,7 @@ namespace autosupport_lsp_server.Serialization
         ITerminal DeserializeTerminalSymbol(XElement element);
         INonTerminal DeserializeNonTerminalSymbol(XElement element);
         IAction DeserializeAction(XElement element);
+        IOneOf DeserializeOneOf(XElement element);
 
         ILanguageDefinition DeserializeLanguageDefinition(XElement element);
         IRule DeserializeRule(XElement element);

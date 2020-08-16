@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace autosupport_lsp_server
 {
     [XLinqName("comments")]
-    public readonly struct CommentRules
+    public readonly struct CommentRules : IXLinqSerializable
     {
         [XLinqName("normalComments")]
         public readonly CommentRule[] NormalComments { get; }
@@ -32,7 +32,7 @@ namespace autosupport_lsp_server
 
         private readonly static AnnotationUtils.XLinqClassAnnotationUtil annotation = AnnotationUtils.XLinqOf(typeof(CommentRules));
 
-        internal object SerializeToXLinq()
+        public XElement SerializeToXLinq()
         {
             return new XElement(annotation.ClassName(),
                     new XElement(
@@ -44,7 +44,7 @@ namespace autosupport_lsp_server
                 );
         }
 
-        internal static CommentRules FromXLinq(XElement? element, InterfaceDeserializer interfaceDeserializer)
+        public static CommentRules FromXLinq(XElement? element, InterfaceDeserializer interfaceDeserializer)
         {
             if (element == null)
                 return new CommentRules(new CommentRule[0], new CommentRule[0]);

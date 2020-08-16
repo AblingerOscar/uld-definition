@@ -97,9 +97,9 @@ namespace autosupport_lsp_server
             {
                 foreach (var rule in Rules)
                 {
-                    if (rule.Value.Symbols == null || rule.Value.Symbols.Count == 0)
+                    if (rule.Value.Symbols == null)
                     {
-                        errors.Add($"{rule.Key} has no symbols");
+                        errors.Add($"{rule.Key}'s symbols are null");
                         continue;
                     }
                     // TODO: properly check for left-recursion even if other elements but nonTerminal are the first
@@ -207,7 +207,7 @@ namespace autosupport_lsp_server
             return new XElement(annotation.ClassName(),
                 new XAttribute(annotation.PropertyName(nameof(LanguageId)), LanguageId),
                 new XAttribute(annotation.PropertyName(nameof(LanguageFilePattern)), LanguageFilePattern),
-                new XAttribute("version", "v1.0.0"),
+                new XAttribute(XName.Get("version", Constants.XML_NAMESPACE), "v1.0.0"),
                 CommentRules.SerializeToXLinq(),
                 new XElement(annotation.PropertyName(nameof(StartRules)),
                     from node in StartRules

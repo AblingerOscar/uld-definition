@@ -61,7 +61,7 @@ namespace autosupport_lsp_server.Serialization
             return Terminal.FromXLinq(element, this);
         }
 
-        private ISymbol DeserializeOneOf(XElement element)
+        public IOneOf DeserializeOneOf(XElement element)
         {
             return OneOf.FromXLinq(element, this);
         }
