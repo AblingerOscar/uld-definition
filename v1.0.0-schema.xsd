@@ -115,7 +115,7 @@
         </xs:keyref>
         <xs:keyref name="startRule" refer="def:ruleName">
             <xs:selector xpath="def:startRules/def:startRule"/>
-            <xs:field xpath="def:startRule"/>
+            <xs:field xpath="."/>
         </xs:keyref>
     </xs:element>
 </xs:schema>
