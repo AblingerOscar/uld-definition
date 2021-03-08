@@ -29,7 +29,7 @@ namespace autosupport_lsp_server.Symbols.Impl
 
         public static ITerminal FromXLinq(XElement element, IInterfaceDeserializer interfaceDeserializer)
         {
-            var name = element.Name.ToString();
+            var name = element.Name.LocalName;
             var elementType = AnnotationUtils.FindTypeWithName(name);
 
             if (elementType == null)

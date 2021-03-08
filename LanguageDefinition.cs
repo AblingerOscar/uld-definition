@@ -78,7 +78,7 @@ namespace autosupport_lsp_server
                         .Where(ch => !char.IsWhiteSpace(ch))
                         .ToArray();
 
-                    if (nonWsTreatAsCharacters != null && nonWsTreatAsCharacters?.Length != 0)
+                    if (nonWsTreatAsCharacters != null && nonWsTreatAsCharacters.Length != 0)
                         errors.Add($"{comment}: invalid characters {nonWsTreatAsCharacters.JoinToString(", ")} in TreatAs – only whitespace is allowed");
                 });
 

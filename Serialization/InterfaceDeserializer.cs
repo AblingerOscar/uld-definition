@@ -26,7 +26,7 @@ namespace autosupport_lsp_server.Serialization
 
         public ISymbol DeserializeSymbol(XElement element)
         {
-            var symbol = AnnotationUtils.FindTypeWithName(element.Name.ToString());
+            var symbol = AnnotationUtils.FindTypeWithName(element.Name.LocalName);
 
             if (symbol != null)
             {
