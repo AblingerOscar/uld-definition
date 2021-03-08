@@ -1,9 +1,8 @@
-﻿using autosupport_lsp_server.Serialization;
-using autosupport_lsp_server.Symbols;
+﻿using uld.definition.Serialization;
+using uld.definition.Symbols;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
-namespace autosupport_lsp_server
+namespace uld.definition
 {
     public interface ILanguageDefinition : IXLinqSerializable
     {

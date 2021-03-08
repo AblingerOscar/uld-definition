@@ -1,10 +1,10 @@
-﻿using autosupport_lsp_server.Serialization;
-using autosupport_lsp_server.Serialization.Annotation;
+﻿using uld.definition.Serialization;
+using uld.definition.Serialization.Annotation;
 using System;
 using System.Xml.Linq;
-using static autosupport_lsp_server.Serialization.Annotation.AnnotationUtils;
+using static uld.definition.Serialization.Annotation.AnnotationUtils;
 
-namespace autosupport_lsp_server.Symbols.Impl
+namespace uld.definition.Symbols.Impl
 {
     [XLinqName("action")]
     public class Action : IAction

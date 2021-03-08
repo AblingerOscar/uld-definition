@@ -1,7 +1,7 @@
-﻿using autosupport_lsp_server.Serialization;
+﻿using uld.definition.Serialization;
 using System;
 
-namespace autosupport_lsp_server.Symbols
+namespace uld.definition.Symbols
 {
     public interface ISymbol : IXLinqSerializable
     {

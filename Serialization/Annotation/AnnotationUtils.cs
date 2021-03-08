@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace autosupport_lsp_server.Serialization.Annotation
+namespace uld.definition.Serialization.Annotation
 {
     internal static class AnnotationUtils
     {

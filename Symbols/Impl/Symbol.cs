@@ -1,9 +1,9 @@
-﻿using autosupport_lsp_server.Serialization;
-using autosupport_lsp_server.Serialization.Annotation;
+﻿using uld.definition.Serialization;
+using uld.definition.Serialization.Annotation;
 using System;
 using System.Xml.Linq;
 
-namespace autosupport_lsp_server.Symbols.Impl
+namespace uld.definition.Symbols.Impl
 {
     public abstract class Symbol : ISymbol
     {

@@ -1,7 +1,7 @@
-﻿using autosupport_lsp_server.Symbols;
+﻿using uld.definition.Symbols;
 using System.Xml.Linq;
 
-namespace autosupport_lsp_server.Serialization
+namespace uld.definition.Serialization
 {
     public interface IInterfaceDeserializer
     {

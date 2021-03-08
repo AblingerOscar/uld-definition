@@ -1,11 +1,11 @@
-﻿using autosupport_lsp_server.Serialization;
-using autosupport_lsp_server.Serialization.Annotation;
-using autosupport_lsp_server.Symbols.Impl.Terminals;
+﻿using uld.definition.Serialization;
+using uld.definition.Serialization.Annotation;
+using uld.definition.Symbols.Impl.Terminals;
 using Sprache;
 using System;
 using System.Xml.Linq;
 
-namespace autosupport_lsp_server.Symbols.Impl
+namespace uld.definition.Symbols.Impl
 {
     public abstract class Terminal : Symbol, ITerminal
     {

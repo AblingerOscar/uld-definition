@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Immutable;
-using autosupport_lsp_server.Serialization.Annotation;
+using uld.definition.Serialization.Annotation;
 using Sprache;
 using System.Xml.Linq;
-using static autosupport_lsp_server.Serialization.Annotation.AnnotationUtils;
+using static uld.definition.Serialization.Annotation.AnnotationUtils;
 
-namespace autosupport_lsp_server.Symbols.Impl.Terminals
+namespace uld.definition.Symbols.Impl.Terminals
 {
     [XLinqName("string")]
     public class StringTerminal : Terminal

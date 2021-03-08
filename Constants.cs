@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace autosupport_lsp_server
+namespace uld.definition
 {
     public static class Constants
     {

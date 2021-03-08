@@ -1,14 +1,12 @@
-﻿using autosupport_lsp_server.Serialization;
-using autosupport_lsp_server.Serialization.Annotation;
-using autosupport_lsp_server.Symbols;
-using autosupport_lsp_server.Symbols.Impl.Terminals;
-using System;
+﻿using uld.definition.Serialization;
+using uld.definition.Serialization.Annotation;
+using uld.definition.Symbols;
+using uld.definition.Symbols.Impl.Terminals;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Xml.Linq;
 
-namespace autosupport_lsp_server
+namespace uld.definition
 {
     // rename autosupport to ULD = "Universal Language Definition"
 

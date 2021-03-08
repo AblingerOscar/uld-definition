@@ -1,4 +1,4 @@
-﻿namespace autosupport_lsp_server.Symbols
+﻿namespace uld.definition.Symbols
 {
     public interface IAction : ISymbol
     {

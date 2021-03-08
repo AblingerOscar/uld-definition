@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace autosupport_lsp_server.Serialization
+namespace uld.definition.Serialization
 {
     public interface IXLinqSerializable
     {

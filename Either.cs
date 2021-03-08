@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace autosupport_lsp_server.Shared
+namespace uld.definition.Shared
 {
     public class Either<TLeft, TRight>
     {

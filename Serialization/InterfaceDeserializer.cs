@@ -1,9 +1,9 @@
-﻿using autosupport_lsp_server.Serialization.Annotation;
-using autosupport_lsp_server.Symbols;
-using autosupport_lsp_server.Symbols.Impl;
+﻿using uld.definition.Serialization.Annotation;
+using uld.definition.Symbols;
+using uld.definition.Symbols.Impl;
 using System.Xml.Linq;
 
-namespace autosupport_lsp_server.Serialization
+namespace uld.definition.Serialization
 {
     public class InterfaceDeserializer : IInterfaceDeserializer
     {

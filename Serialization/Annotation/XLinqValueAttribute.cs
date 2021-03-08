@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace autosupport_lsp_server.Serialization.Annotation
+namespace uld.definition.Serialization.Annotation
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     internal class XLinqValueAttribute : Attribute

@@ -1,9 +1,9 @@
-﻿using autosupport_lsp_server.Shared;
+﻿using uld.definition.Shared;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace autosupport_lsp_server
+namespace uld.definition
 {
     public static class Extensions
     {
