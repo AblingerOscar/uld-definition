@@ -12,7 +12,7 @@
     </xs:simpleType>
     <xs:simpleType name="actionString">
         <xs:restriction base="xs:string">
-            <xs:pattern value="identifier|identifierType (inner|set [^ ]+)|identifierKind set [^ ]+|declaration|implementation|folding (start|end)"/>
+            <xs:pattern value="identifier|identifierType (inner|set [^ ]+)|identifierKind set [^ ]+|declaration|definition|implementation|folding (start|end)|environment (pop|(push|import) (fixed|inner) [^ ]*)"/>
         </xs:restriction>
     </xs:simpleType>
 
